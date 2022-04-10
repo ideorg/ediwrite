@@ -1,3 +1,8 @@
+build
+.idea
+Makefile*
+*build-*
+
 # C++ objects and libs
 *.slo
 *.lo
@@ -27,8 +32,6 @@ qrc_*.cpp
 ui_*.h
 *.qmlc
 *.jsc
-Makefile*
-*build-*
 *.qm
 *.prl
 
@@ -45,7 +48,7 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
-# QtCreator 4.8< compilation database 
+# QtCreator 4.8< compilation database
 compile_commands.json
 
 # QtCreator local machine specific files for imported projects
