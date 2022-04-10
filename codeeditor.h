@@ -26,6 +26,7 @@ public:
     ~CodeEditor() override;
 
     void openFile(const QString &fileName);
+    void saveFile(const QString &fileName);
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;

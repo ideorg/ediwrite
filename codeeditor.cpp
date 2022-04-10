@@ -86,8 +86,7 @@ CodeEditor::~CodeEditor()
 {
 }
 
-void CodeEditor::openFile(const QString &fileName)
-{
+void CodeEditor::openFile(const QString &fileName) {
     QFile f(fileName);
     if (!f.open(QFile::ReadOnly)) {
         qWarning() << "Failed to open" << fileName << ":" << f.errorString();
@@ -101,6 +100,16 @@ void CodeEditor::openFile(const QString &fileName)
 
     setWindowTitle(fileName);
     setPlainText(QString::fromUtf8(f.readAll()));
+}
+
+void CodeEditor::saveFile(const QString &fileName) {
+    QString text = toPlainText();
+    QFile f(fileName);
+    if (!f.open(QFile::WriteOnly)) {
+        qWarning() << "Failed to open" << fileName << ":" << f.errorString();
+        return;
+    }
+    f.write(text.toUtf8());
 }
 
 void CodeEditor::contextMenuEvent(QContextMenuEvent *event)

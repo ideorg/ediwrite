@@ -5,6 +5,7 @@
 */
 
 #include "codeeditor.h"
+#include "MainWindow.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -21,14 +22,9 @@ int main(int argc, char **argv)
 
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
-    int height = screenGeometry.height();
-    int width = screenGeometry.width();
 
-    CodeEditor edit;
-    edit.resize(int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
-    edit.show();
-    if (parser.positionalArguments().size() == 1) {
-        edit.openFile(parser.positionalArguments().at(0));
-    }
+    MainWindow mainWindow;
+    mainWindow.resize(int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
+    mainWindow.show();
     return app.exec();
 }

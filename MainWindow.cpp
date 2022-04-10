@@ -1,0 +1,62 @@
+//
+// Created by andrzej on 4/10/22.
+//
+
+#include "MainWindow.h"
+#include <QMenuBar>
+#include <QFileDialog>
+
+MainWindow::MainWindow() {
+    createMenus();
+    setCentralWidget(&edit);
+}
+
+void MainWindow::openFile()
+{
+    QFileDialog dialog(this, tr("Open File"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog);
+    if (dialog.exec() == QDialog::Accepted) {
+        QString fileName = dialog.selectedFiles().first();
+        edit.openFile(fileName);
+    }
+}
+
+void MainWindow::saveFile()
+{
+    QFileDialog dialog(this, tr("Open File"));
+    dialog.setOption(QFileDialog::DontUseNativeDialog);
+    if (dialog.exec() == QDialog::Accepted) {
+        QString fileName = dialog.selectedFiles().first();
+        edit.saveFile(fileName);
+    }
+}
+
+void MainWindow::createMenus() {
+    QMenu *fileMenu;
+    QMenu *toolMenu;
+    QAction *openAct;
+    QAction *saveAct;
+    QAction *exitAct;
+    QAction *addAct;
+    QAction *editAct;
+    QAction *removeAc;
+
+    fileMenu = menuBar()->addMenu(tr("&File"));
+
+    openAct = new QAction(tr("&Open..."), this);
+    fileMenu->addAction(openAct);
+    connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
+//! [1a]
+
+    saveAct = new QAction(tr("&Save As..."), this);
+    fileMenu->addAction(saveAct);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
+
+    fileMenu->addSeparator();
+
+    exitAct = new QAction(tr("E&xit"), this);
+    fileMenu->addAction(exitAct);
+    connect(exitAct, &QAction::triggered, this, &QWidget::close);
+
+    toolMenu = menuBar()->addMenu(tr("&Tools"));
+}
