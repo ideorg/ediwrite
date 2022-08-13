@@ -14,6 +14,7 @@ public:
     MainWindow();
 private slots:
     void onTextChanged();
+    void onTabChanged(int index);
 private:
     UntitleCounter untitleCounter;
     CodeEditor *getEditorByPath(QString path);

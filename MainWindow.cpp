@@ -14,6 +14,10 @@ MainWindow::MainWindow() {
     tabWidget->setTabsClosable(true);
     tabWidget->setMovable(true);
     tabWidget->setTabPosition(QTabWidget::South);
+    connect(tabWidget, &QTabWidget::currentChanged, this,
+            [this](int index) {
+                onTabChanged(index);
+            });
     connect(tabWidget, &QTabWidget::tabCloseRequested, this,
             [this](int index) {
                 tryCloseTab(index);
@@ -154,4 +158,10 @@ void MainWindow::onTextChanged() {
     bool modified = editor->document()->isModified();
     QColor color = modified? Qt::red : Qt::black;
     tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
+}
+
+void MainWindow::onTabChanged(int index) {
+    QWidget *tab = tabWidget->widget(index);
+    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    setWindowTitle(editor->getTitle());
 }
