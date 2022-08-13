@@ -6,5 +6,5 @@ Fedora and similar:
 * sudo dnf install kf5-syntax-highlighting-devel
 
 Ubuntu, Mint and similar:
-* sudo apt install qt5-default
+* (qt5 is already installed)
 * sudo apt install libkf5syntaxhighlighting-dev
