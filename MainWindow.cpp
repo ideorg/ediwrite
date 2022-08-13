@@ -13,10 +13,17 @@ MainWindow::MainWindow() {
     tabWidget->setTabsClosable(true);
     tabWidget->setMovable(true);
     tabWidget->setTabPosition(QTabWidget::South);
-    connect(tabWidget->tabBar(), &QTabBar::tabCloseRequested, tabWidget->tabBar(), &QTabBar::removeTab);
+    connect(tabWidget, &QTabWidget::tabCloseRequested, this,
+            [this](int index) {
+                tryCloseTab(index);
+            });
     edit = new CodeEditor();
     tabWidget->addTab(edit, "1");
     setCentralWidget(tabWidget);
+}
+
+void MainWindow::tryCloseTab(int index) {
+    tabWidget->removeTab(index);
 }
 
 void MainWindow::openFile()

@@ -17,6 +17,7 @@ private:
     void saveFile();
     QTabWidget *tabWidget;
     CodeEditor *edit;
+    void tryCloseTab(int index);
 };
 
 
