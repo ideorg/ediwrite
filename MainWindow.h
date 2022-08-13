@@ -15,7 +15,8 @@ private:
     void createMenus();
     void openFile();
     void saveFile();
-    CodeEditor edit;
+    QTabWidget *tabWidget;
+    CodeEditor *edit;
 };
 
 

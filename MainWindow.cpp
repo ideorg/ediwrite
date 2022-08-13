@@ -8,7 +8,13 @@
 
 MainWindow::MainWindow() {
     createMenus();
-    setCentralWidget(&edit);
+    tabWidget = new QTabWidget;
+    tabWidget->setTabsClosable(true);
+    tabWidget->setMovable(true);
+    tabWidget->setTabPosition(QTabWidget::South);
+    edit = new CodeEditor();
+    tabWidget->addTab(edit, "1");
+    setCentralWidget(tabWidget);
 }
 
 void MainWindow::openFile()
@@ -17,7 +23,7 @@ void MainWindow::openFile()
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
-        edit.openFile(fileName);
+        edit->openFile(fileName);
     }
 }
 
@@ -27,7 +33,7 @@ void MainWindow::saveFile()
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
-        edit.saveFile(fileName);
+        edit->saveFile(fileName);
     }
 }
 
