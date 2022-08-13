@@ -16,6 +16,10 @@ private slots:
     void onTextChanged();
 private:
     UntitleCounter untitleCounter;
+    CodeEditor *getEditorByPath(QString path);
+    CodeEditor *openInEditor(QString path);
+    void openOrActivate(QString path);
+
     void createMenus();
     void newFile();
     void openFile();

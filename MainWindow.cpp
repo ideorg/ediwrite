@@ -49,17 +49,51 @@ void MainWindow::newFile()
     tabWidget->addTab(editor, editor->getTitle());
 }
 
+CodeEditor * MainWindow::openInEditor(QString path) {
+    CodeEditor *editor = new CodeEditor();
+    connect(editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
+    editor->path = path;
+    tabWidget->addTab(editor, editor->getTitle());
+    editor->openFile(path);
+    editor->document()->setModified(false);
+    onTextChanged();
+    return editor;
+}
+
+CodeEditor *MainWindow::getEditorByPath(QString path) {
+    for (int i=0; i<tabWidget->count(); i++) {
+        QWidget *tab = tabWidget->widget(i);
+        CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+        if (editor->path==path) return editor;
+    }
+    return nullptr;
+}
+
+void MainWindow::openOrActivate(QString path) {
+    CodeEditor *editor = getEditorByPath(path);
+    if (editor) {
+        QTextCursor cursor = editor->textCursor();
+        int position = cursor.position();
+        editor->openFile(path);
+        cursor.setPosition(position, QTextCursor::MoveAnchor);
+        editor->setTextCursor(cursor);
+        editor->activateWindow();
+        editor->document()->setModified(false);
+        onTextChanged();
+    }
+    else
+        editor = openInEditor(path);
+    tabWidget->setCurrentWidget(editor);
+    editor->setFocus();
+}
+
 void MainWindow::openFile()
 {
     QFileDialog dialog(this, tr("Open File"));
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
-        QString fileName = dialog.selectedFiles().first();
-        CodeEditor *editor = new CodeEditor();
-        connect(editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
-        editor->path = fileName;
-        tabWidget->addTab(editor, editor->getTitle());
-        editor->openFile(fileName);
+        QString path = dialog.selectedFiles().first();
+        openOrActivate(path);
     }
 }
 
@@ -117,6 +151,7 @@ void MainWindow::createMenus() {
 void MainWindow::onTextChanged() {
     QWidget *tab = tabWidget->currentWidget();
     CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
-    QColor color = editor->document()->isModified()? Qt::red : Qt::black;
+    bool modified = editor->document()->isModified();
+    QColor color = modified? Qt::red : Qt::black;
     tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
 }
