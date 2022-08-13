@@ -7,9 +7,11 @@
 #include <QFileDialog>
 #include <QTabBar>
 #include <QMessageBox>
+#include <QStatusBar>
 
 MainWindow::MainWindow() {
     createMenus();
+    statusBar()->showMessage(tr("Ready"));
     tabWidget = new QTabWidget;
     tabWidget->setTabsClosable(true);
     tabWidget->setMovable(true);
@@ -166,4 +168,5 @@ void MainWindow::onTabChanged(int index) {
     QWidget *tab = tabWidget->widget(index);
     CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
     setWindowTitle(editor->getTitle());
+    statusBar()->showMessage(editor->path);
 }
