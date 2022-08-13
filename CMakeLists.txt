@@ -17,7 +17,8 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 set(PROJECT_SOURCES
         main.cpp
         codeeditor.cpp
-        MainWindow.cpp MainWindow.h)
+        MainWindow.cpp MainWindow.h
+        UntitleCounter.cpp UntitleCounter.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(editwrite
