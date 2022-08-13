@@ -43,6 +43,7 @@ void MainWindow::tryCloseTab(int index) {
 void MainWindow::newFile()
 {
     CodeEditor *editor = new CodeEditor();
+    connect(editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
     editor->untitleId = untitleCounter.getNextId();
     tabWidget->addTab(editor, editor->getTitle());
 }
@@ -54,6 +55,7 @@ void MainWindow::openFile()
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
         CodeEditor *editor = new CodeEditor();
+        connect(editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
         editor->path = fileName;
         tabWidget->addTab(editor, editor->getTitle());
         editor->openFile(fileName);
@@ -108,4 +110,11 @@ void MainWindow::createMenus() {
     connect(exitAct, &QAction::triggered, this, &QWidget::close);
 
     toolMenu = menuBar()->addMenu(tr("&Tools"));
+}
+
+void MainWindow::onTextChanged() {
+    QWidget *tab = tabWidget->currentWidget();
+    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    QColor color = editor->document()->isModified()? Qt::red : Qt::black;
+    tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
 }

@@ -12,6 +12,8 @@
 class MainWindow: public QMainWindow {
 public:
     MainWindow();
+private slots:
+    void onTextChanged();
 private:
     UntitleCounter untitleCounter;
     void createMenus();
