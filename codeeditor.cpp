@@ -20,6 +20,7 @@
 #include <QMenu>
 #include <QPainter>
 #include <QPalette>
+#include <QMessageBox>
 
 class CodeEditorSidebar : public QWidget
 {
@@ -84,6 +85,7 @@ CodeEditor::CodeEditor(QWidget *parent)
 
 CodeEditor::~CodeEditor()
 {
+    QMessageBox::warning(this, "info", "destructor");
 }
 
 void CodeEditor::openFile(const QString &fileName) {
