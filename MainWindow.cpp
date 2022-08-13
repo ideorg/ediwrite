@@ -28,9 +28,15 @@ void MainWindow::tryCloseTab(int index) {
     CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
     if (editor->document()->isModified())
     {
-        QMessageBox::warning(nullptr, "Warning", "Text not saved!",
-                             QMessageBox::Ok);
-        return;
+        QString message = "The text has been changed.\n";
+        message += "Do you want to save the modifications? (No = close and discard changes)";
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Warning", message,
+                                      QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+        if (reply == QMessageBox::Cancel)
+            return;
+        if (reply == QMessageBox::Yes)
+            if (!saveFile()) return;
     }
     tabWidget->removeTab(index);
 }
@@ -45,14 +51,17 @@ void MainWindow::openFile()
     }
 }
 
-void MainWindow::saveFile()
+bool MainWindow::saveFile()
 {
-    QFileDialog dialog(this, tr("Open File"));
+    QFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
         edit->saveFile(fileName);
+        return true;
     }
+    return false;
 }
 
 void MainWindow::createMenus() {

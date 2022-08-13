@@ -14,7 +14,7 @@ public:
 private:
     void createMenus();
     void openFile();
-    void saveFile();
+    bool saveFile();
     QTabWidget *tabWidget;
     CodeEditor *edit;
     void tryCloseTab(int index);
