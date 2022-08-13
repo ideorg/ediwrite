@@ -92,10 +92,12 @@ void MainWindow::createMenus() {
     fileMenu = menuBar()->addMenu(tr("&File"));
 
     newAct = new QAction(tr("&New"), this);
+    newAct->setShortcut(QKeySequence("ctrl+n"));
     fileMenu->addAction(newAct);
     connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
 
     openAct = new QAction(tr("&Open..."), this);
+    openAct->setShortcut(QKeySequence("ctrl+o"));
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
 //! [1a]
