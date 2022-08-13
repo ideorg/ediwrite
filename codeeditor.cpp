@@ -359,8 +359,11 @@ void CodeEditor::toggleFold(const QTextBlock &startBlock)
 QString CodeEditor::getTitle() {
     if (path.isEmpty())
         return "Untitled" + QString::number(untitleId);
-    else
-        return path;
+    else {
+        QFileInfo fileInfo(path);
+        QString filename(fileInfo.fileName());
+        return filename;
+    }
 }
 
 #include "codeeditor.moc"
