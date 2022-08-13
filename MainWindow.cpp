@@ -5,6 +5,7 @@
 #include "MainWindow.h"
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QTabBar>
 
 MainWindow::MainWindow() {
     createMenus();
@@ -12,6 +13,7 @@ MainWindow::MainWindow() {
     tabWidget->setTabsClosable(true);
     tabWidget->setMovable(true);
     tabWidget->setTabPosition(QTabWidget::South);
+    connect(tabWidget->tabBar(), &QTabBar::tabCloseRequested, tabWidget->tabBar(), &QTabBar::removeTab);
     edit = new CodeEditor();
     tabWidget->addTab(edit, "1");
     setCentralWidget(tabWidget);
