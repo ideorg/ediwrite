@@ -33,6 +33,9 @@ private:
     bool saveFile();
     QTabWidget *tabWidget;
     void tryCloseTab(int index);
+
+    CodeEditor* currentEditor();
+    CodeEditor* selectedEditor(int index);
 };
 
 

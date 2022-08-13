@@ -29,8 +29,8 @@ MainWindow::MainWindow() {
 }
 
 void MainWindow::tryCloseTab(int index) {
-    QWidget *tab = tabWidget->widget(index);
-    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    CodeEditor* editor = selectedEditor(index);
+    if (!editor) return;
     if (editor->document()->isModified())
     {
         QString message = "The text has been changed.\n";
@@ -115,8 +115,8 @@ bool MainWindow::saveFile()
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
-        QWidget *tab = tabWidget->currentWidget();
-        CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+        CodeEditor* editor = currentEditor();
+        if (!editor) return false;
         editor->saveFile(fileName);
         return true;
     }
@@ -173,16 +173,16 @@ void MainWindow::createStatusBar() {
 }
 
 void MainWindow::onTextChanged() {
-    QWidget *tab = tabWidget->currentWidget();
-    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    CodeEditor* editor = currentEditor();
+    if (!editor) return;
     bool modified = editor->document()->isModified();
     QColor color = modified? Qt::red : Qt::black;
     tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
 }
 
 void MainWindow::onCursorPositionChanged() {
-    QWidget *tab = tabWidget->currentWidget();
-    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    CodeEditor* editor = currentEditor();
+    if (!editor) return;
     QTextCursor cursor = editor->textCursor();
     auto line = cursor.blockNumber()+1;
     auto col = cursor.positionInBlock()+1;
@@ -191,8 +191,18 @@ void MainWindow::onCursorPositionChanged() {
 }
 
 void MainWindow::onTabChanged(int index) {
-    QWidget *tab = tabWidget->widget(index);
-    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    CodeEditor* editor = selectedEditor(index);
+    if (!editor) return;
     setWindowTitle(editor->getTitle());
     m_statusRight->setText(editor->path);
+}
+
+CodeEditor* MainWindow::currentEditor() {
+    QWidget *tab = tabWidget->currentWidget();
+    return dynamic_cast<CodeEditor*>(tab);
+}
+
+CodeEditor* MainWindow::selectedEditor(int index) {
+    QWidget *tab = tabWidget->widget(index);
+    return dynamic_cast<CodeEditor*>(tab);
 }
