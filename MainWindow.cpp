@@ -100,7 +100,6 @@ void MainWindow::createMenus() {
     openAct->setShortcut(QKeySequence("ctrl+o"));
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
-//! [1a]
 
     saveAct = new QAction(tr("&Save As..."), this);
     fileMenu->addAction(saveAct);
