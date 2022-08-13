@@ -39,15 +39,11 @@ void MainWindow::tryCloseTab(int index) {
     tabWidget->removeTab(index);
 }
 
-CodeEditor *MainWindow::newTab() {
-    CodeEditor *editor = new CodeEditor();
-    tabWidget->addTab(editor, "1");
-    return editor;
-}
-
 void MainWindow::newFile()
 {
-    newTab();
+    CodeEditor *editor = new CodeEditor();
+    editor->untitleId = untitleCounter.getNextId();
+    tabWidget->addTab(editor, editor->getTitle());
 }
 
 void MainWindow::openFile()
@@ -56,7 +52,9 @@ void MainWindow::openFile()
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
-        CodeEditor *editor = newTab();
+        CodeEditor *editor = new CodeEditor();
+        editor->path = fileName;
+        tabWidget->addTab(editor, editor->getTitle());
         editor->openFile(fileName);
     }
 }

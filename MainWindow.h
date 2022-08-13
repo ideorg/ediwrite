@@ -7,13 +7,14 @@
 
 #include <QMainWindow>
 #include "codeeditor.h"
+#include "UntitleCounter.h"
 
 class MainWindow: public QMainWindow {
 public:
     MainWindow();
 private:
+    UntitleCounter untitleCounter;
     void createMenus();
-    CodeEditor *newTab();
     void newFile();
     void openFile();
     bool saveFile();

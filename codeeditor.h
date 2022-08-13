@@ -49,6 +49,11 @@ private:
     KSyntaxHighlighting::Repository m_repository;
     KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
     CodeEditorSidebar *m_sideBar;
+
+public:
+    QString getTitle();
+    QString path;
+    int untitleId = 0;
 };
 
 #endif // CODEEDITOR_H

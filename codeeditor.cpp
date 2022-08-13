@@ -356,4 +356,11 @@ void CodeEditor::toggleFold(const QTextBlock &startBlock)
     Q_EMIT document()->documentLayout()->documentSizeChanged(document()->documentLayout()->documentSize());
 }
 
+QString CodeEditor::getTitle() {
+    if (path.isEmpty())
+        return "Untitled" + QString::number(untitleId);
+    else
+        return path;
+}
+
 #include "codeeditor.moc"

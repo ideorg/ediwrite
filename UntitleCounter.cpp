@@ -9,11 +9,13 @@ int UntitleCounter::getNextId() {
     int result = cnt;
     for (int i=1; i<cnt; i++)
     {
-        if (bitArray.testBit(i)==false) {
+        if (!bitArray.testBit(i)) {
             result = i;
             break;
         }
     };
+    if (bitArray.size()<result+1)
+        bitArray.resize(result+1);
     bitArray.setBit(result);
     return result;
 }
@@ -26,5 +28,7 @@ bool UntitleCounter::releaseId(int id) {
 }
 
 UntitleCounter::UntitleCounter() {
+    if (bitArray.size()<1)
+        bitArray.resize(1);
     bitArray.setBit(0); //not used for untitled
 }
