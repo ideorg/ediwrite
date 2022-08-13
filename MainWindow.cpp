@@ -6,6 +6,7 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QTabBar>
+#include <QMessageBox>
 
 MainWindow::MainWindow() {
     createMenus();
@@ -23,6 +24,14 @@ MainWindow::MainWindow() {
 }
 
 void MainWindow::tryCloseTab(int index) {
+    QWidget *tab = tabWidget->widget(index);
+    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    if (editor->document()->isModified())
+    {
+        QMessageBox::warning(nullptr, "Warning", "Text not saved!",
+                             QMessageBox::Ok);
+        return;
+    }
     tabWidget->removeTab(index);
 }
 
