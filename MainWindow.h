@@ -6,6 +6,7 @@
 #define EDITWRITE_MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 #include "codeeditor.h"
 #include "UntitleCounter.h"
 
@@ -14,14 +15,19 @@ public:
     MainWindow();
 private slots:
     void onTextChanged();
+    void onCursorPositionChanged();
     void onTabChanged(int index);
 private:
     UntitleCounter untitleCounter;
     CodeEditor *getEditorByPath(QString path);
     CodeEditor *openInEditor(QString path);
     void openOrActivate(QString path);
+    QLabel *m_statusLeft;
+    QLabel *m_statusMiddle;
+    QLabel *m_statusRight;
 
     void createMenus();
+    void createStatusBar();
     void newFile();
     void openFile();
     bool saveFile();

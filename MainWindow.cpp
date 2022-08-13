@@ -8,10 +8,11 @@
 #include <QTabBar>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QLabel>
 
 MainWindow::MainWindow() {
     createMenus();
-    statusBar()->showMessage(tr("Ready"));
+    createStatusBar();
     tabWidget = new QTabWidget;
     tabWidget->setTabsClosable(true);
     tabWidget->setMovable(true);
@@ -51,6 +52,7 @@ void MainWindow::newFile()
 {
     CodeEditor *editor = new CodeEditor();
     connect(editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
+    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &MainWindow::onCursorPositionChanged);
     editor->untitleId = untitleCounter.getNextId();
     tabWidget->addTab(editor, editor->getTitle());
     tabWidget->setCurrentWidget(editor);
@@ -60,6 +62,7 @@ void MainWindow::newFile()
 CodeEditor * MainWindow::openInEditor(QString path) {
     CodeEditor *editor = new CodeEditor();
     connect(editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
+    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &MainWindow::onCursorPositionChanged);
     editor->path = path;
     tabWidget->addTab(editor, editor->getTitle());
     editor->openFile(path);
@@ -156,6 +159,19 @@ void MainWindow::createMenus() {
     toolMenu = menuBar()->addMenu(tr("&Tools"));
 }
 
+void MainWindow::createStatusBar() {
+    m_statusLeft = new QLabel("line:col", this);
+    m_statusLeft->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    m_statusLeft->setMinimumWidth(40);
+    m_statusMiddle = new QLabel("Middle", this);
+    m_statusMiddle->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    m_statusRight = new QLabel("path", this);
+    m_statusRight->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    statusBar()->addPermanentWidget(m_statusLeft, 0);
+    statusBar()->addPermanentWidget(m_statusMiddle, 0);
+    statusBar()->addPermanentWidget(m_statusRight, 1);
+}
+
 void MainWindow::onTextChanged() {
     QWidget *tab = tabWidget->currentWidget();
     CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
@@ -164,9 +180,19 @@ void MainWindow::onTextChanged() {
     tabWidget->tabBar()->setTabTextColor(tabWidget->currentIndex(),color);
 }
 
+void MainWindow::onCursorPositionChanged() {
+    QWidget *tab = tabWidget->currentWidget();
+    CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+    QTextCursor cursor = editor->textCursor();
+    auto line = cursor.blockNumber()+1;
+    auto col = cursor.positionInBlock()+1;
+    QString label = QString::number(line)+":"+QString::number(col);
+    m_statusLeft->setText(label);
+}
+
 void MainWindow::onTabChanged(int index) {
     QWidget *tab = tabWidget->widget(index);
     CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
     setWindowTitle(editor->getTitle());
-    statusBar()->showMessage(editor->path);
+    m_statusRight->setText(editor->path);
 }
