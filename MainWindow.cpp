@@ -38,6 +38,7 @@ void MainWindow::tryCloseTab(int index) {
     }
     untitleCounter.releaseId(editor->untitleId);
     tabWidget->removeTab(index);
+    delete editor;
 }
 
 void MainWindow::newFile()
