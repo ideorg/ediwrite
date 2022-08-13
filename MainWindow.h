@@ -13,10 +13,11 @@ public:
     MainWindow();
 private:
     void createMenus();
+    CodeEditor *newTab();
+    void newFile();
     void openFile();
     bool saveFile();
     QTabWidget *tabWidget;
-    CodeEditor *edit;
     void tryCloseTab(int index);
 };
 

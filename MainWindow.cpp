@@ -18,8 +18,6 @@ MainWindow::MainWindow() {
             [this](int index) {
                 tryCloseTab(index);
             });
-    edit = new CodeEditor();
-    tabWidget->addTab(edit, "1");
     setCentralWidget(tabWidget);
 }
 
@@ -41,13 +39,25 @@ void MainWindow::tryCloseTab(int index) {
     tabWidget->removeTab(index);
 }
 
+CodeEditor *MainWindow::newTab() {
+    CodeEditor *editor = new CodeEditor();
+    tabWidget->addTab(editor, "1");
+    return editor;
+}
+
+void MainWindow::newFile()
+{
+    newTab();
+}
+
 void MainWindow::openFile()
 {
     QFileDialog dialog(this, tr("Open File"));
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
-        edit->openFile(fileName);
+        CodeEditor *editor = newTab();
+        editor->openFile(fileName);
     }
 }
 
@@ -58,7 +68,9 @@ bool MainWindow::saveFile()
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
-        edit->saveFile(fileName);
+        QWidget *tab = tabWidget->currentWidget();
+        CodeEditor* editor = dynamic_cast<CodeEditor*>(tab);
+        editor->saveFile(fileName);
         return true;
     }
     return false;
@@ -67,6 +79,7 @@ bool MainWindow::saveFile()
 void MainWindow::createMenus() {
     QMenu *fileMenu;
     QMenu *toolMenu;
+    QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
     QAction *exitAct;
@@ -75,6 +88,10 @@ void MainWindow::createMenus() {
     QAction *removeAc;
 
     fileMenu = menuBar()->addMenu(tr("&File"));
+
+    newAct = new QAction(tr("&New"), this);
+    fileMenu->addAction(newAct);
+    connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
 
     openAct = new QAction(tr("&Open..."), this);
     fileMenu->addAction(openAct);
