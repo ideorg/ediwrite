@@ -10,9 +10,11 @@
 
 /* Named editors will have id=0, untitled from 1,2... */
 class UntitleCounter {
-    QBitArray bitArray;
+    const int RESIZE = 32;
+    QBitArray *bitArray;
 public:
     UntitleCounter();
+    ~UntitleCounter() {delete bitArray;};
     int getNextId();
     bool releaseId(int id);
 };

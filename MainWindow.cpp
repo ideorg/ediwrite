@@ -36,6 +36,7 @@ void MainWindow::tryCloseTab(int index) {
         if (reply == QMessageBox::Yes)
             if (!saveFile()) return;
     }
+    untitleCounter.releaseId(editor->untitleId);
     tabWidget->removeTab(index);
 }
 
