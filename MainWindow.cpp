@@ -51,6 +51,8 @@ void MainWindow::newFile()
     connect(editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
     editor->untitleId = untitleCounter.getNextId();
     tabWidget->addTab(editor, editor->getTitle());
+    tabWidget->setCurrentWidget(editor);
+    editor->setFocus();
 }
 
 CodeEditor * MainWindow::openInEditor(QString path) {
