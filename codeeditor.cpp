@@ -85,7 +85,7 @@ CodeEditor::CodeEditor(QWidget *parent)
 
 CodeEditor::~CodeEditor()
 {
-    QMessageBox::warning(this, "info", "destructor");
+    //QMessageBox::warning(this, "info", "destructor");
 }
 
 void CodeEditor::openFile(const QString &fileName) {
