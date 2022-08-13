@@ -1,5 +1,5 @@
 //
-// Created by andrzej on 4/10/22.
+// Created by Andrzej Borucki on 2022-04-10
 //
 
 #include "MainWindow.h"
