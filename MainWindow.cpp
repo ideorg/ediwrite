@@ -6,7 +6,6 @@
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QTabBar>
-#include <QMessageBox>
 #include <QStatusBar>
 #include <QLabel>
 #include "raise.h"
@@ -32,23 +31,21 @@ MainWindow::MainWindow() {
 
 void MainWindow::tryCloseTab(int index) {
     CodeEditor* editor = selectedEditor(index);
-    if (!editor) return;
-    if (editor->document()->isModified())
-    {
-        QString message = "The text has been changed.\n";
-        message += "Do you want to save the modifications? (No = close and discard changes)";
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, "Warning", message,
-                                      QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
-        if (reply == QMessageBox::Cancel)
-            return;
-        if (reply == QMessageBox::Yes)
+    assert(editor);
+    auto closeAction = closeManager->tryCloseTab(editor);
+    if (closeAction==CloseManager::SaveAndClose) {
+        if (editor->path.isEmpty()) {
             if (!saveAs()) return;
+        } else {
+            if (!save()) return;
+        }
     }
-    if (editor->path.isEmpty())
-        untitleCounter.releaseId(editor->untitleId);
-    tabWidget->removeTab(index);
-    delete editor;
+    if (closeAction!=CloseManager::Cancel) {
+        if (editor->path.isEmpty())
+            untitleCounter.releaseId(editor->untitleId);
+        tabWidget->removeTab(index);
+        delete editor;
+    }
 }
 
 void MainWindow::newFile()
