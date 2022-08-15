@@ -122,7 +122,7 @@ bool MainWindow::saveFile()
         if (editor->path.isEmpty())
             untitleCounter.releaseId(editor->untitleId);
         editor->path = fileName;
-        editor->saveFile(fileName);
+        editor->saveFileToPath();
         return true;
     }
     return false;

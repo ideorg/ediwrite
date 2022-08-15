@@ -104,14 +104,16 @@ void CodeEditor::openFile(const QString &fileName) {
     setPlainText(QString::fromUtf8(f.readAll()));
 }
 
-void CodeEditor::saveFile(const QString &fileName) {
+bool CodeEditor::saveFileToPath() {
+    assert(!path.isEmpty());
     QString text = toPlainText();
-    QFile f(fileName);
+    QFile f(path);
     if (!f.open(QFile::WriteOnly)) {
-        qWarning() << "Failed to open" << fileName << ":" << f.errorString();
-        return;
+        qWarning() << "Failed to open" << path << ":" << f.errorString();
+        return false;
     }
     f.write(text.toUtf8());
+    return true;
 }
 
 void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
