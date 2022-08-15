@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.5)
 
 project(editwrite VERSION 0.5 LANGUAGES CXX)
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-Werror=return-type")
+    add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+else()
+    add_definitions(-DUSE64bit=true)
+endif()
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOMOC ON)
