@@ -113,6 +113,7 @@ bool CodeEditor::saveFileToPath() {
         return false;
     }
     f.write(text.toUtf8());
+    document()->setModified(false);
     return true;
 }
 

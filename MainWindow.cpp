@@ -110,13 +110,23 @@ void MainWindow::openFile()
     }
 }
 
+bool MainWindow::saveFileToPath(CodeEditor* editor) {
+    assert(editor);
+    if (editor->saveFileToPath()) {
+        onTextChanged();
+        return true;
+    }
+    else
+        return false;
+};
+
 bool MainWindow::save() {
     CodeEditor* editor = currentEditor();
     if (!editor) return false;
     if (editor->path.isEmpty())
         return saveAs();
     else
-        return editor->saveFileToPath();
+        return saveFileToPath(editor);
 }
 
 bool MainWindow::saveAs()
@@ -130,7 +140,8 @@ bool MainWindow::saveAs()
         if (editor->path.isEmpty())
             untitleCounter.releaseId(editor->untitleId);
         editor->path = dialog.selectedFiles().first();
-        return editor->saveFileToPath();
+        onTextChanged();
+        return saveFileToPath(editor);
     }
     else
         return false;
@@ -142,6 +153,7 @@ void MainWindow::createMenus() {
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
+    QAction *saveAsAct;
     QAction *exitAct;
     QAction *addAct;
     QAction *editAct;
@@ -159,9 +171,13 @@ void MainWindow::createMenus() {
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
 
-    saveAct = new QAction(tr("&Save As..."), this);
+    saveAct = new QAction(tr("&Save"), this);
     fileMenu->addAction(saveAct);
-    connect(saveAct, &QAction::triggered, this, &MainWindow::saveAs);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
+
+    saveAsAct = new QAction(tr("save &As..."), this);
+    fileMenu->addAction(saveAsAct);
+    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAs);
 
     fileMenu->addSeparator();
 

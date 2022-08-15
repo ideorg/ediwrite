@@ -32,6 +32,7 @@ private:
     void createStatusBar();
     void newFile();
     void openFile();
+    bool saveFileToPath(CodeEditor* editor);
     bool save();
     bool saveAs();
     QTabWidget *tabWidget;
