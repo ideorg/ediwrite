@@ -40,3 +40,11 @@ Actions before closing:
   * 3.1 All editors have associated path:
   * 3.2 All editors are untitled:
   * 3.3 Are both untitled and editors with path
+
+
+* Save
+  * if editor has path, only save
+  * if is untitled the same as saveAs
+* saveAs
+  * call save dialog,  if OK, save with 
+  chosen name, if cancel  - exit
