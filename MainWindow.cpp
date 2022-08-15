@@ -42,7 +42,7 @@ void MainWindow::tryCloseTab(int index) {
         if (reply == QMessageBox::Cancel)
             return;
         if (reply == QMessageBox::Yes)
-            if (!saveFile()) return;
+            if (!saveAs()) return;
     }
     if (editor->path.isEmpty())
         untitleCounter.releaseId(editor->untitleId);
@@ -110,7 +110,7 @@ void MainWindow::openFile()
     }
 }
 
-bool MainWindow::saveFile()
+bool MainWindow::saveAs()
 {
     QFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -153,7 +153,7 @@ void MainWindow::createMenus() {
 
     saveAct = new QAction(tr("&Save As..."), this);
     fileMenu->addAction(saveAct);
-    connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::saveAs);
 
     fileMenu->addSeparator();
 
