@@ -1,26 +1,29 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(editwrite VERSION 0.1 LANGUAGES C CXX)
+project(editwrite VERSION 0.5 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# SingleApplication base class
+set(QAPPLICATION_CLASS QApplication)
+add_subdirectory(SingleApplication)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+find_package(Qt${QT_DEFAULT_MAJOR_VERSION} COMPONENTS Core REQUIRED)
 
 set(PROJECT_SOURCES
-        main.cpp
+       main.cpp
         codeeditor.cpp
         MainWindow.cpp MainWindow.h
-        UntitleCounter.cpp UntitleCounter.h)
+        UntitleCounter.cpp UntitleCounter.h
+	    raise.cpp raise.h
+        )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+
+if(${QT_DEFAULT_MAJOR_VERSION} GREATER_EQUAL 6)
     qt_add_executable(editwrite
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
@@ -42,20 +45,11 @@ else()
         )
     endif()
 endif()
-
 target_include_directories(editwrite PRIVATE
         /usr/include/KF5/KSyntaxHighlighting)
-
-#target_link_directories(editwrite PRIVATE)
-
-target_link_libraries(editwrite PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
-    KF5SyntaxHighlighting)
-
-set_target_properties(editwrite PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-)
+target_link_libraries(${PROJECT_NAME} SingleApplication::SingleApplication
+         KF5SyntaxHighlighting
+	 X11)
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(editwrite)

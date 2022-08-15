@@ -17,6 +17,8 @@ private slots:
     void onTextChanged();
     void onCursorPositionChanged();
     void onTabChanged(int index);
+public slots:
+    void handleMessage();
 private:
     UntitleCounter untitleCounter;
     CodeEditor *getEditorByPath(QString path);

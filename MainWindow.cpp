@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QStatusBar>
 #include <QLabel>
+#include "raise.h"
 
 MainWindow::MainWindow() {
     createMenus();
@@ -205,4 +206,8 @@ CodeEditor* MainWindow::currentEditor() {
 CodeEditor* MainWindow::selectedEditor(int index) {
     QWidget *tab = tabWidget->widget(index);
     return dynamic_cast<CodeEditor*>(tab);
+}
+
+void MainWindow::handleMessage() {
+    raiseThis();
 }
