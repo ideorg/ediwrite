@@ -110,22 +110,30 @@ void MainWindow::openFile()
     }
 }
 
+bool MainWindow::save() {
+    CodeEditor* editor = currentEditor();
+    if (!editor) return false;
+    if (editor->path.isEmpty())
+        return saveAs();
+    else
+        return editor->saveFileToPath();
+}
+
 bool MainWindow::saveAs()
 {
+    CodeEditor* editor = currentEditor();
+    if (!editor) return false;
     QFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setOption(QFileDialog::DontUseNativeDialog);
     if (dialog.exec() == QDialog::Accepted) {
-        QString fileName = dialog.selectedFiles().first();
-        CodeEditor* editor = currentEditor();
-        assert(editor);
         if (editor->path.isEmpty())
             untitleCounter.releaseId(editor->untitleId);
-        editor->path = fileName;
-        editor->saveFileToPath();
-        return true;
+        editor->path = dialog.selectedFiles().first();
+        return editor->saveFileToPath();
     }
-    return false;
+    else
+        return false;
 }
 
 void MainWindow::createMenus() {

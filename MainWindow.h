@@ -32,6 +32,7 @@ private:
     void createStatusBar();
     void newFile();
     void openFile();
+    bool save();
     bool saveAs();
     QTabWidget *tabWidget;
     void tryCloseTab(int index);
