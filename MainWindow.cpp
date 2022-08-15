@@ -44,7 +44,8 @@ void MainWindow::tryCloseTab(int index) {
         if (reply == QMessageBox::Yes)
             if (!saveFile()) return;
     }
-    untitleCounter.releaseId(editor->untitleId);
+    if (editor->path.isEmpty())
+        untitleCounter.releaseId(editor->untitleId);
     tabWidget->removeTab(index);
     delete editor;
 }
@@ -117,7 +118,10 @@ bool MainWindow::saveFile()
     if (dialog.exec() == QDialog::Accepted) {
         QString fileName = dialog.selectedFiles().first();
         CodeEditor* editor = currentEditor();
-        if (!editor) return false;
+        assert(editor);
+        if (editor->path.isEmpty())
+            untitleCounter.releaseId(editor->untitleId);
+        editor->path = fileName;
         editor->saveFile(fileName);
         return true;
     }

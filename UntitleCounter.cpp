@@ -22,8 +22,8 @@ int UntitleCounter::getNextId() {
 }
 
 bool UntitleCounter::releaseId(int id) {
-    if (id<1) return false;
-    if (!bitArray->testBit(id)) return false;
+    assert(id>=1);
+    assert(bitArray->testBit(id));
     bitArray->clearBit(id);
     return true;
 }
