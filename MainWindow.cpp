@@ -172,6 +172,7 @@ void MainWindow::createMenus() {
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
 
     saveAct = new QAction(tr("&Save"), this);
+    saveAct->setShortcut(QKeySequence("ctrl+s"));
     fileMenu->addAction(saveAct);
     connect(saveAct, &QAction::triggered, this, &MainWindow::save);
 
