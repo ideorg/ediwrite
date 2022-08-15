@@ -9,10 +9,12 @@
 #include <QLabel>
 #include "codeeditor.h"
 #include "UntitleCounter.h"
+#include "CloseManager.h"
 
 class MainWindow: public QMainWindow {
 public:
     MainWindow();
+    ~MainWindow() { delete closeManager;}
 private slots:
     void onTextChanged();
     void onCursorPositionChanged();
@@ -21,6 +23,7 @@ public slots:
     void handleMessage();
 private:
     UntitleCounter untitleCounter;
+    CloseManager *closeManager;
     CodeEditor *getEditorByPath(QString path);
     CodeEditor *openInEditor(QString path);
     void openOrActivate(QString path);

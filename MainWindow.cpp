@@ -26,6 +26,7 @@ MainWindow::MainWindow() {
             [this](int index) {
                 tryCloseTab(index);
             });
+    closeManager = new CloseManager(tabWidget);
     setCentralWidget(tabWidget);
 }
 
