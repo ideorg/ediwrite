@@ -167,7 +167,7 @@ void MainWindow::createMenus() {
     QAction *newAct;
     QAction *openAct;
     QAction *closeAct;
-    QAction *openAllAct;
+    QAction *closeAllAct;
     QAction *saveAct;
     QAction *saveAsAct;
     QAction *exitAct;
@@ -191,6 +191,11 @@ void MainWindow::createMenus() {
     closeAct->setShortcut(QKeySequence("ctrl+F4"));
     fileMenu->addAction(closeAct);
     connect(closeAct, &QAction::triggered, this, &MainWindow::tryCloseCurrent);
+
+    closeAllAct = new QAction(tr("&Close"), this);
+    closeAllAct->setShortcut(QKeySequence("shift+ctrl+F4"));
+    fileMenu->addAction(closeAllAct);
+    connect(closeAllAct, &QAction::triggered, this, &MainWindow::tryCloseAll);
 
     fileMenu->addSeparator();
 
