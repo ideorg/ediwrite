@@ -48,6 +48,8 @@ private:
 
     CodeEditor* currentEditor();
     CodeEditor* selectedEditor(int index);
+    bool eventFilter(QObject *target, QEvent *event) override;
+    void activateTab(int index);
 };
 
 

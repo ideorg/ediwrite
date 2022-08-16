@@ -8,6 +8,7 @@
 #include <QTabBar>
 #include <QStatusBar>
 #include <QMessageBox>
+#include <QGuiApplication>
 #include <QLabel>
 #include "raise.h"
 
@@ -28,6 +29,7 @@ MainWindow::MainWindow() {
             });
     closeManager = new CloseManager(tabWidget);
     setCentralWidget(tabWidget);
+    QGuiApplication::instance()->installEventFilter(this);
 }
 
 MainWindow::CloseTab MainWindow::tryCloseTab(int index) {
@@ -278,4 +280,25 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
 void MainWindow::tryCloseCurrent() {
     tryCloseTab(tabWidget->currentIndex());
+}
+
+bool MainWindow::eventFilter(QObject *target, QEvent *event) {
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (event->type() == QEvent::KeyPress)
+    {
+        int key = keyEvent->key();
+        if (key >= '0' && key <= '9' && keyEvent->modifiers() & Qt::AltModifier) {
+            int n = key > '0'? key-'1': 9;
+            activateTab(n);
+            return true;
+        }
+    }
+    return QObject::eventFilter(target, event);
+}
+
+void MainWindow::activateTab(int index) {
+    assert(index>=0);
+    if (index==tabWidget->currentIndex()) return;
+    if (index>=tabWidget->count()) return;
+    tabWidget->setCurrentWidget(tabWidget->widget(index));
 }
