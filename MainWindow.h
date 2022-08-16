@@ -21,6 +21,8 @@ private slots:
     void onTabChanged(int index);
 public slots:
     void handleMessage();
+protected:
+    void closeEvent(QCloseEvent *event) override;
 private:
     UntitleCounter untitleCounter;
     CloseManager *closeManager;

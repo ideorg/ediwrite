@@ -238,3 +238,7 @@ CodeEditor* MainWindow::selectedEditor(int index) {
 void MainWindow::handleMessage() {
     raiseThis();
 }
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    event->accept();
+}
