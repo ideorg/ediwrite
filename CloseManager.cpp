@@ -8,6 +8,7 @@
 CloseManager::CloseAction CloseManager::tryCloseTab(CodeEditor* editor) {
     if (editor->document()->isModified())
     {
+        tabWidget->setCurrentWidget(editor);
         QString message = "The text has been changed.\n";
         message += "Do you want to save the modifications? (No = close and discard changes)";
         QMessageBox::StandardButton reply;

@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QTabBar>
 #include <QStatusBar>
+#include <QMessageBox>
 #include <QLabel>
 #include "raise.h"
 
@@ -240,5 +241,34 @@ void MainWindow::handleMessage() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+    for (int index = tabWidget->count()-1; index>=0; index--) {
+        CodeEditor* editor = selectedEditor(index);
+        assert(editor);
+        auto closeAction = closeManager->tryCloseTab(editor);
+        if (closeAction==CloseManager::SaveAndClose) {
+            if (editor->path.isEmpty()) {
+                if (!saveAs()) {
+                    event->ignore();
+                    return;
+                }
+            } else {
+                if (!save()) {
+                    QMessageBox::warning(this, "error", editor->getTitle() + " can't be saved! Try SaveAs");
+                    event->ignore();
+                    return;
+                }
+            }
+        }
+        if (closeAction!=CloseManager::Cancel) {
+            if (editor->path.isEmpty())
+                untitleCounter.releaseId(editor->untitleId);
+            tabWidget->removeTab(index);
+            delete editor;
+        } else
+        {
+            event->ignore();
+            return;
+        }
+    }
     event->accept();
 }
