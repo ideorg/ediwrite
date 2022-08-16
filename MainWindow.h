@@ -43,6 +43,7 @@ private:
     bool saveAs();
     QTabWidget *tabWidget;
     CloseTab tryCloseTab(int index);
+    CloseTab tryCloseAll();
 
     CodeEditor* currentEditor();
     CodeEditor* selectedEditor(int index);

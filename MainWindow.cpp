@@ -54,6 +54,16 @@ MainWindow::CloseTab MainWindow::tryCloseTab(int index) {
     } else return Ignore;
 }
 
+MainWindow::CloseTab MainWindow::tryCloseAll() {
+    for (int index = tabWidget->count()-1; index>=0; index--) {
+        CloseTab result = tryCloseTab(index);
+        if (result == Ignore) {
+            return Ignore;
+        }
+    }
+    return Accept;
+}
+
 void MainWindow::newFile()
 {
     CodeEditor *editor = new CodeEditor();
@@ -246,12 +256,8 @@ void MainWindow::handleMessage() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    for (int index = tabWidget->count()-1; index>=0; index--) {
-        CloseTab result = tryCloseTab(index);
-        if (result == Ignore) {
-            event->ignore();
-            return;
-        }
-    }
-    event->accept();
+    if (tryCloseAll() == Ignore)
+        event->ignore();
+    else
+        event->accept();
 }
