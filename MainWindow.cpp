@@ -30,15 +30,19 @@ MainWindow::MainWindow() {
     setCentralWidget(tabWidget);
 }
 
-void MainWindow::tryCloseTab(int index) {
+MainWindow::CloseTab MainWindow::tryCloseTab(int index) {
     CodeEditor* editor = selectedEditor(index);
     assert(editor);
     auto closeAction = closeManager->tryCloseTab(editor);
     if (closeAction==CloseManager::SaveAndClose) {
         if (editor->path.isEmpty()) {
-            if (!saveAs()) return;
+            if (!saveAs())
+                return Ignore;
         } else {
-            if (!save()) return;
+            if (!save()) {
+                QMessageBox::warning(this, "error", editor->getTitle() + " can't be saved! Try SaveAs");
+                return Ignore;
+            }
         }
     }
     if (closeAction!=CloseManager::Cancel) {
@@ -46,7 +50,8 @@ void MainWindow::tryCloseTab(int index) {
             untitleCounter.releaseId(editor->untitleId);
         tabWidget->removeTab(index);
         delete editor;
-    }
+        return Accept;
+    } else return Ignore;
 }
 
 void MainWindow::newFile()
@@ -242,30 +247,8 @@ void MainWindow::handleMessage() {
 
 void MainWindow::closeEvent(QCloseEvent *event) {
     for (int index = tabWidget->count()-1; index>=0; index--) {
-        CodeEditor* editor = selectedEditor(index);
-        assert(editor);
-        auto closeAction = closeManager->tryCloseTab(editor);
-        if (closeAction==CloseManager::SaveAndClose) {
-            if (editor->path.isEmpty()) {
-                if (!saveAs()) {
-                    event->ignore();
-                    return;
-                }
-            } else {
-                if (!save()) {
-                    QMessageBox::warning(this, "error", editor->getTitle() + " can't be saved! Try SaveAs");
-                    event->ignore();
-                    return;
-                }
-            }
-        }
-        if (closeAction!=CloseManager::Cancel) {
-            if (editor->path.isEmpty())
-                untitleCounter.releaseId(editor->untitleId);
-            tabWidget->removeTab(index);
-            delete editor;
-        } else
-        {
+        CloseTab result = tryCloseTab(index);
+        if (result == Ignore) {
             event->ignore();
             return;
         }

@@ -24,6 +24,7 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:
+    enum CloseTab {Ignore, Accept};
     UntitleCounter untitleCounter;
     CloseManager *closeManager;
     CodeEditor *getEditorByPath(QString path);
@@ -41,7 +42,7 @@ private:
     bool save();
     bool saveAs();
     QTabWidget *tabWidget;
-    void tryCloseTab(int index);
+    CloseTab tryCloseTab(int index);
 
     CodeEditor* currentEditor();
     CodeEditor* selectedEditor(int index);
