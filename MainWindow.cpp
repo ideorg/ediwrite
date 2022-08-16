@@ -166,6 +166,8 @@ void MainWindow::createMenus() {
     QMenu *toolMenu;
     QAction *newAct;
     QAction *openAct;
+    QAction *closeAct;
+    QAction *openAllAct;
     QAction *saveAct;
     QAction *saveAsAct;
     QAction *exitAct;
@@ -184,6 +186,13 @@ void MainWindow::createMenus() {
     openAct->setShortcut(QKeySequence("ctrl+o"));
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
+
+    closeAct = new QAction(tr("&Close"), this);
+    closeAct->setShortcut(QKeySequence("ctrl+F4"));
+    fileMenu->addAction(closeAct);
+    connect(closeAct, &QAction::triggered, this, &MainWindow::tryCloseCurrent);
+
+    fileMenu->addSeparator();
 
     saveAct = new QAction(tr("&Save"), this);
     saveAct->setShortcut(QKeySequence("ctrl+s"));
@@ -260,4 +269,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         event->ignore();
     else
         event->accept();
+}
+
+void MainWindow::tryCloseCurrent() {
+    tryCloseTab(tabWidget->currentIndex());
 }

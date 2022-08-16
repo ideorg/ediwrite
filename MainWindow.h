@@ -38,6 +38,7 @@ private:
     void createStatusBar();
     void newFile();
     void openFile();
+    void tryCloseCurrent();
     bool saveFileToPath(CodeEditor* editor);
     bool save();
     bool saveAs();
