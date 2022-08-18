@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #ifndef _WIN32
+#include "Win.h"
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <csignal>
@@ -66,11 +67,9 @@ int pid2wid(int pid) {
 
 void raisePid(int pid) {
     int wid = pid2wid(pid);
-    char buf[20];
-    sprintf(buf, "%x", wid);
-    std::string strwid = (std::string)"0x" + buf;
-    std::string cmdline = "wmctrl -i -R "+ strwid;
-    system(cmdline.c_str());
+    Win win(wid);
+    win.fetch();
+    win.activate();
 }
 #endif
 

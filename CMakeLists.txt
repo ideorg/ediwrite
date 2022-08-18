@@ -27,7 +27,8 @@ set(PROJECT_SOURCES
         MainWindow.cpp MainWindow.h
         UntitleCounter.cpp UntitleCounter.h
 	    raise.cpp raise.h
-        CloseManager.cpp CloseManager.h)
+        CloseManager.cpp CloseManager.h
+        Win.cpp Win.h EdiException.h)
 
 
 if(${QT_DEFAULT_MAJOR_VERSION} GREATER_EQUAL 6)
