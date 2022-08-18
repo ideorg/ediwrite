@@ -267,10 +267,6 @@ CodeEditor* MainWindow::selectedEditor(int index) {
     return dynamic_cast<CodeEditor*>(tab);
 }
 
-void MainWindow::handleMessage() {
-    raiseThis();
-}
-
 void MainWindow::closeEvent(QCloseEvent *event) {
     if (tryCloseAll() == Ignore)
         event->ignore();
@@ -301,4 +297,12 @@ void MainWindow::activateTab(int index) {
     if (index==tabWidget->currentIndex()) return;
     if (index>=tabWidget->count()) return;
     tabWidget->setCurrentWidget(tabWidget->widget(index));
+}
+
+void MainWindow::receivedMessage(int instanceId, QByteArray message) {
+    QString argLine = QString(message);
+    QStringList args = argLine.split(' ');
+    for (int i=1; i<args.size(); i++)
+        openOrActivate(args[i]);
+    raiseThis();
 }

@@ -15,12 +15,13 @@ class MainWindow: public QMainWindow {
 public:
     MainWindow();
     ~MainWindow() { delete closeManager;}
+    void openOrActivate(QString path);
 private slots:
     void onTextChanged();
     void onCursorPositionChanged();
     void onTabChanged(int index);
 public slots:
-    void handleMessage();
+    void receivedMessage(int instanceId, QByteArray message);
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:
@@ -29,7 +30,6 @@ private:
     CloseManager *closeManager;
     CodeEditor *getEditorByPath(QString path);
     CodeEditor *openInEditor(QString path);
-    void openOrActivate(QString path);
     QLabel *m_statusLeft;
     QLabel *m_statusMiddle;
     QLabel *m_statusRight;

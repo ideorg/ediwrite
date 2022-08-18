@@ -9,19 +9,26 @@
 
 int main(int argc, char *argv[])
 {
-    SingleApplication app(argc, argv);
-    QCommandLineParser parser;
-    parser.addHelpOption();
-    parser.addPositionalArgument(QStringLiteral("source"), QStringLiteral("The source file to highlight."));
-    parser.process(app);
+    SingleApplication app(argc, argv, true);
 
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
 
     MainWindow mainWindow;
-    QObject::connect( &app, &SingleApplication::instanceStarted, [ &mainWindow ]() {
-        mainWindow.handleMessage();
-    });
+    // If this is a secondary instance
+    if( app.isSecondary() ) {
+        app.sendMessage( app.arguments().join(' ').toUtf8() );
+        return 0;
+    } else {
+        QObject::connect(
+                &app,
+                &SingleApplication::receivedMessage,
+                &mainWindow,
+                &MainWindow::receivedMessage
+        );
+    }
+    for (int i=1; i<app.arguments().size(); i++)
+        mainWindow.openOrActivate(app.arguments()[i]);
     mainWindow.resize(int(screenGeometry.width()*0.8), int(screenGeometry.height()*0.8));
     mainWindow.show();
     return app.exec();
