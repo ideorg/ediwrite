@@ -1,10 +1,9 @@
 //
 // Created by Andrzej Borucki on 2022-08-17
 //
-
-#include "Win.h"
-#undef CursorShape
 #include "EdiException.h"
+#include "Win.h"
+
 
 bool Win::tryGetCurrentWorkspace(const char *prop_name, uint &result) {
     Atom property = XInternAtom(display, prop_name, false);
@@ -48,12 +47,12 @@ void Win::xclientSend(const char *msg, long data) {
     event.xclient.data.l[4] = 0;
 
     if (!XSendEvent(display, root, false, mask, &event))
-        ;//throw EdiException("Can't send event ");
+        throw EdiException("Can't send event");
 }
 
 Win::Win(Window w) : w(w) {
     if (!(display = XOpenDisplay(nullptr)))
-        ;//throw EdiException("Can't open display");
+        throw EdiException("Can't open display");
     root = DefaultRootWindow(display);
 }
 
@@ -65,7 +64,7 @@ uint Win::getCurrentWorkspace() {
     uint currentWorkspace = 0;
     if (!tryGetCurrentWorkspace("_NET_CURRENT_DESKTOP", currentWorkspace))
         if (!tryGetCurrentWorkspace("_WIN_WORKSPACE", currentWorkspace))
-            ;//throw EdiException("can't get current workspace\n");
+            throw EdiException("can't get current workspace\n");
     return currentWorkspace;
 }
 
