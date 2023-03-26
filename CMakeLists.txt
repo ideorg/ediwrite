@@ -19,7 +19,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QAPPLICATION_CLASS QApplication)
 add_subdirectory(SingleApplication)
 
-find_package(Qt${QT_DEFAULT_MAJOR_VERSION} COMPONENTS Core REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
        main.cpp
@@ -53,10 +54,14 @@ else()
         )
     endif()
 endif()
-target_include_directories(editwrite PRIVATE
-        /usr/include/KF5/KSyntaxHighlighting)
-target_link_libraries(${PROJECT_NAME} SingleApplication::SingleApplication
-         KF5SyntaxHighlighting
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+	 SingleApplication
+           /usr/include/KF5/KSyntaxHighlighting)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+	 SingleApplication::SingleApplication
+           KF5SyntaxHighlighting
 	 X11)
 
 if(QT_VERSION_MAJOR EQUAL 6)
